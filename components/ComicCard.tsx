@@ -8,7 +8,7 @@ import { PUBLISHER_COLORS, formatPrice } from "@/lib/utils";
 
 export default function ComicCard({ comic }: { comic: Comic }) {
   const [imgError, setImgError] = useState(false);
-  const coverSrc = imgError ? "/covers/placeholder.jpg" : `/covers/${comic.id}.jpg`;
+  const coverSrc = imgError || !comic.coverUrl ? "/covers/placeholder.jpg" : comic.coverUrl;
 
   return (
     <Link

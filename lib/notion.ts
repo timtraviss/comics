@@ -13,6 +13,7 @@ export type Comic = {
   date: string | null;
   publisher: string[];
   cover: string | null;
+  coverUrl: string | null;
   keyIssue: boolean;
   icc: boolean;
   price: number | null;
@@ -61,6 +62,15 @@ function pageToComic(page: PageObjectResponse): Comic {
   const externalUrl =
     p["URL"]?.type === "url" ? p["URL"].url : null;
 
+  const coverUrl = (() => {
+    const prop = p["Files & media"];
+    if (prop?.type !== "files" || prop.files.length === 0) return null;
+    const first = prop.files[0];
+    if (first.type === "file") return first.file.url;
+    if (first.type === "external") return first.external.url;
+    return null;
+  })();
+
   return {
     id: page.id,
     title,
@@ -68,6 +78,7 @@ function pageToComic(page: PageObjectResponse): Comic {
     date,
     publisher,
     cover,
+    coverUrl,
     keyIssue,
     icc,
     price,
